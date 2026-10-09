@@ -1,0 +1,43 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile with role-based access for Customer vs Authorizer",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "role": { "type": "string", "enum": ["customer", "authorizer"] },
+        "meterId": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["uid", "email", "role"]
+    },
+    "Alert": {
+      "title": "Alert",
+      "description": "Security and high consumption incident logs",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "type": { "type": "string" },
+        "meterId": { "type": "string" },
+        "value": { "type": "string" },
+        "status": { "type": "string" },
+        "description": { "type": "string" },
+        "timestamp": { "type": "string" }
+      },
+      "required": ["id", "type", "meterId", "status"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User accounts and assigned roles"
+    },
+    "/alerts/{alertId}": {
+      "schema": "Alert",
+      "description": "Security alerts and meter tamper logs"
+    }
+  }
+}

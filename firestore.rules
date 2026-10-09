@@ -1,0 +1,36 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default-deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isAuthorizer() {
+      return isSignedIn() && (
+        request.auth.token.email == "vpranav88380@gmail.com" ||
+        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "authorizer")
+      );
+    }
+
+    match /users/{userId} {
+      allow read: if isSignedIn() && (isOwner(userId) || isAuthorizer());
+      allow create, update: if isSignedIn() && isOwner(userId);
+      allow delete: if isAuthorizer();
+    }
+
+    match /alerts/{alertId} {
+      allow read: if isSignedIn();
+      allow write: if isAuthorizer();
+    }
+  }
+}

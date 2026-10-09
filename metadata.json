@@ -1,0 +1,8 @@
+{
+  "name": "Smart Energy Monitor",
+  "description": "Automated electricity billing and monitoring system with ESP32 IoT telemetry, live power tracking, and tamper detection.",
+  "permissions": [],
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
